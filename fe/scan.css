@@ -1,6 +1,14 @@
-/* Tambahan RicaWatch scan_mobile — boleh ditempel di akhir globals.css. */
+/* Tambahan RicaWatch — boleh ditempel di akhir globals.css. */
+html { -webkit-text-size-adjust: 100%; }
 body { font-family: 'Inter', sans-serif; background-color: #e5e7eb; }
-.mobile-container { max-width: 414px; margin: 0 auto; background-color: #f8fafc; min-height: 100vh; position: relative; box-shadow: 0 0 20px rgba(0,0,0,.1); }
+
+/* HP: selebar layar. Tablet/desktop: kolom tengah maks 1080px, dashboard 2 kolom */
+.app-shell { width: 100%; margin: 0 auto; background-color: #f8fafc; min-height: 100vh; min-height: 100dvh; position: relative; }
+@media (min-width: 768px) { .app-shell { max-width: 1080px; box-shadow: 0 0 20px rgba(0,0,0,.1); } }
+
+/* Navigasi bawah: menempel di dasar layar HP, melayang di tengah pada layar lebar */
+.app-nav { position: fixed; left: 0; right: 0; bottom: 0; z-index: 20; padding-bottom: calc(1rem + env(safe-area-inset-bottom, 0px)); box-shadow: 0 -4px 6px -1px rgba(0,0,0,.1); }
+@media (min-width: 768px) { .app-nav { left: 50%; right: auto; width: 28rem; transform: translateX(-50%); } }
 
 .scan-stage { position: relative; overflow: hidden; }
 .scan-stage video { display: block; width: 100%; height: auto; background: #000; }
