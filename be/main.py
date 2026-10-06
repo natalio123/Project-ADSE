@@ -14,7 +14,7 @@ CLASSES = ["Tomat_Segar", "Tomat_Menurun", "Cabai"]
 MENURUN_IDS = [1]                                   # sama dengan notebook
 
 # Letakkan bobot hasil training di backend/models/ (best_pilot_v2.pt atau final_all_data.pt)
-MODEL_PATH = Path(os.getenv("MODEL_PATH", Path(__file__).parent / "models" / "best_pilot_v2.pt"))
+MODEL_PATH = Path(os.getenv("MODEL_PATH", Path(__file__).parent / "models" / "best.pt"))
 IMGSZ = int(os.getenv("IMGSZ", "960"))              # sama dengan IMGSZ training
 CONF = float(os.getenv("CONF", "0.25"))             # sama dengan analyze_photo() di notebook
 API_KEY = os.getenv("API_KEY", "")                  # opsional; kosong = tanpa kunci (frontend memanggil langsung)
