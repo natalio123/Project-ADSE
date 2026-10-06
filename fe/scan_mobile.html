@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RicaWatch - Dashboard</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <script src="config.js"></script>
+    <link href="scan.css" rel="stylesheet"><!-- tambahan; isinya juga bisa ditempel di akhir globals.css -->
+</head>
+<body class="antialiased">
+
+<div class="mobile-container pb-24">
+    <header class="bg-[#1a3324] text-white p-5 rounded-b-[1.5rem]">
+        <div class="flex justify-between items-center mb-6">
+            <div class="flex items-center gap-2 border border-[#30523e] p-1.5 rounded-lg">
+                <svg class="w-5 h-5 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 21v-4m0 0V5a2 2 0 012-2h6.5l1 1H21l-3 6 3 6h-8.5l-1-1H5a2 2 0 00-2 2zm9-13.5V9"></path></svg>
+            </div>
+            <span class="font-bold text-xl mr-auto ml-3 tracking-wide">RicaWatch</span>
+            <div class="flex items-center gap-4">
+                <div class="relative bg-[#2e4738] p-2 rounded-full">
+                    <svg class="w-5 h-5 text-gray-200" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                    <div id="bellDot" class="absolute top-1.5 right-2 w-2 h-2 bg-red-500 rounded-full border border-[#1a3324] hidden"></div>
+                </div>
+                <div class="w-8 h-8 rounded-full border border-gray-500 bg-[#2e4738] flex items-center justify-center text-xs font-semibold">BS</div>
+            </div>
+        </div>
+        <h1 class="text-[22px] font-bold mb-1">Selamat Datang, Bu Sari</h1>
+        <p class="text-sm text-gray-300 mb-5">Scan Kualitas YOLO - Pedagang Pasar Bersehati</p>
+        <input id="searchInput" type="text" placeholder="Cari komoditas, hasil scan..."
+               class="w-full bg-[#2a4334] text-sm text-gray-100 rounded-lg px-4 py-3 focus:outline-none placeholder-gray-400 border border-[#3b5746]">
+    </header>
+
+    <main class="p-5">
+        <div class="grid grid-cols-2 gap-4 mb-4">
+            <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                <p class="text-gray-500 text-sm mb-2">Total Scan</p>
+                <p id="statTotal" class="text-3xl font-bold text-gray-900 mb-1">0</p>
+                <span class="inline-block bg-emerald-50 text-emerald-600 text-xs font-semibold px-2 py-0.5 rounded mt-1">Hari ini</span>
+                <p class="text-gray-500 text-xs mt-3">Scan komoditas</p>
+            </div>
+            <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm">
+                <p class="text-gray-500 text-sm mb-2">Segar</p>
+                <p id="statSegar" class="text-3xl font-bold text-gray-900 mb-1">0</p>
+                <span id="statSegarPct" class="inline-block bg-emerald-50 text-emerald-600 text-xs font-semibold px-2 py-0.5 rounded mt-1">0%</span>
+                <p class="text-gray-500 text-xs mt-3">Kualitas baik</p>
+            </div>
+        </div>
+        <div class="bg-white p-4 rounded-2xl border border-gray-100 shadow-sm mb-5">
+            <p class="text-gray-500 text-sm mb-2">Menurun</p>
+            <p id="statMenurun" class="text-3xl font-bold text-gray-900 mb-1">0</p>
+            <span id="statMenurunPct" class="inline-block bg-orange-50 text-orange-500 text-xs font-semibold px-2 py-0.5 rounded mt-1">0%</span>
+            <p class="text-gray-500 text-xs mt-3">Perlu perhatian</p>
+        </div>
+
+        <!-- Scanner -->
+        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm mb-5">
+            <h2 class="font-bold text-gray-900 text-lg mb-4">Arahkan kamera ke komoditas</h2>
+            <div class="scan-stage bg-[#f4f5f7] rounded-xl mb-4">
+                <div id="placeholder" class="flex flex-col items-center justify-center py-12">
+                    <svg class="w-16 h-16 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M3 9a2 2 0 012-2h.93a2 2 0 001.664-.89l.812-1.22A2 2 0 0110.07 4h3.86a2 2 0 011.664.89l.812 1.22A2 2 0 0018.07 7H19a2 2 0 012 2v9a2 2 0 01-2 2H5a2 2 0 01-2-2V9z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 13a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                    <p class="text-gray-500 text-sm">Tekan tombol di bawah untuk memulai</p>
+                </div>
+                <div id="stage" class="hidden relative">
+                    <video id="video" playsinline muted></video>
+                    <canvas id="overlay"></canvas>
+                    <div id="liveBadge" class="live-badge"><span class="live-dot"></span><span id="liveText">LIVE</span></div>
+                    <div id="liveChip" class="live-chip hidden"></div>
+                </div>
+            </div>
+            <button id="scanBtn" class="w-full bg-[#10b981] hover:bg-emerald-500 text-white font-bold text-lg py-3.5 rounded-xl transition shadow-md shadow-emerald-200">Mulai Scan</button>
+            <div id="liveControls" class="hidden grid grid-cols-2 gap-3">
+                <button id="pauseBtn" class="bg-white border border-gray-300 text-gray-800 font-bold py-3.5 rounded-xl">Jeda</button>
+                <button id="saveBtn" class="bg-[#10b981] hover:bg-emerald-500 text-white font-bold py-3.5 rounded-xl shadow-md shadow-emerald-200">Simpan</button>
+            </div>
+            <button id="stopBtn" class="hidden w-full text-sm text-gray-500 mt-3 py-1">Selesai dan tutup kamera</button>
+            <p id="error" class="text-red-600 text-sm mt-3 hidden"></p>
+        </div>
+
+        <!-- Hasil terakhir -->
+        <div class="bg-white p-5 rounded-2xl border border-gray-100 shadow-sm mb-6">
+            <h2 class="font-bold text-gray-900 text-lg mb-1">Hasil Scan Terakhir</h2>
+            <p class="text-gray-500 text-sm mb-5">Akurasi deteksi kualitas komoditas</p>
+            <div id="lastResult" class="bg-[#f4f5f7] rounded-xl p-4 space-y-4">
+                <p class="text-gray-500 text-sm">Belum ada hasil scan.</p>
+            </div>
+        </div>
+
+        <h2 class="font-bold text-gray-900 text-lg mb-4">Riwayat Scan</h2>
+        <div id="historyList" class="space-y-3"></div>
+    </main>
+
+    <nav class="absolute bottom-0 w-full bg-[#1a3324] rounded-t-2xl px-6 py-4 flex justify-between items-center shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.1)]">
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path d="M10.707 2.293a1 1 0 00-1.414 0l-7 7a1 1 0 001.414 1.414L4 10.414V17a1 1 0 001 1h2a1 1 0 001-1v-2a1 1 0 011-1h2a1 1 0 011 1v2a1 1 0 001 1h2a1 1 0 001-1v-6.586l.293.293a1 1 0 001.414-1.414l-7-7z"></path></svg><span class="text-[10px] font-medium">Overview</span></a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"></path></svg><span class="text-[10px] font-medium">Catat Stok</span></a>
+        <a href="#" class="flex flex-col items-center gap-1 text-gray-400 hover:text-white"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M17.707 9.293a1 1 0 010 1.414l-7 7a1 1 0 01-1.414 0l-7-7A.997.997 0 012 10V5a3 3 0 013-3h5c.256 0 .512.098.707.293l7 7zM5 6a1 1 0 100-2 1 1 0 000 2z" clip-rule="evenodd"></path></svg><span class="text-[10px] font-medium">Harga</span></a>
+        <a href="#" class="flex flex-col items-center gap-1 text-[#10b981]"><svg class="w-6 h-6" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M3 4a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm2 2V5h1v1H5zM3 13a1 1 0 011-1h3a1 1 0 011 1v3a1 1 0 01-1 1H4a1 1 0 01-1-1v-3zm2 2v-1h1v1H5zM13 3a1 1 0 00-1 1v3a1 1 0 001 1h3a1 1 0 001-1V4a1 1 0 00-1-1h-3zm1 2v1h1V5h-1z" clip-rule="evenodd"></path></svg><span class="text-[10px] font-medium">Scan</span></a>
+    </nav>
+</div>
+
+<script>
+/* ===== Konfigurasi =====
+   diisi dari config.js (hostname Cloudflare Tunnel).
+   Saat dev lokal, ganti ke 'http://localhost:8000/api'. */
+const API_BASE = window.RICAWATCH_API || '/api';
+const MAX_SIDE = 960;                 // sama dengan IMGSZ model
+const STORE_KEY = 'ricawatch_history_v1';
+
+const $ = id => document.getElementById(id);
+const STYLE = {
+  Segar:     { text: 'text-[#10b981]', bar: 'bg-[#10b981]', chip: 'bg-emerald-50 text-emerald-500', box: '#10b981' },
+  Menurun:   { text: 'text-orange-500', bar: 'bg-orange-500', chip: 'bg-orange-50 text-orange-500', box: '#f97316' },
+  Terdeteksi:{ text: 'text-sky-600',    bar: 'bg-sky-500',    chip: 'bg-sky-50 text-sky-600',       box: '#0ea5e9' },
+};
+let history = [];
+try { history = JSON.parse(localStorage.getItem(STORE_KEY) || '[]'); } catch (_) {}
+let stream = null, mode = 'idle';     // idle -> live -> result
+
+function el(tag, cls, text) { const e = document.createElement(tag); if (cls) e.className = cls; if (text != null) e.textContent = text; return e; }
+function showError(msg) { const p = $('error'); p.textContent = msg || ''; p.classList.toggle('hidden', !msg); }
+const fmtTime = ts => new Date(ts).toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }).replace('.', ':');
+const isToday = ts => new Date(ts).toDateString() === new Date().toDateString();
+
+/* ===== Render ===== */
+function renderStats() {
+  const today = history.filter(h => isToday(h.ts));
+  const seg = today.filter(h => h.status === 'Segar').length;
+  const men = today.filter(h => h.status === 'Menurun').length;
+  const pct = n => today.length ? Math.round(n / today.length * 100) + '%' : '0%';
+  $('statTotal').textContent = today.length;
+  $('statSegar').textContent = seg;      $('statSegarPct').textContent = pct(seg);
+  $('statMenurun').textContent = men;    $('statMenurunPct').textContent = pct(men);
+  $('bellDot').classList.toggle('hidden', men === 0);
+}
+
+function renderLast() {
+  const box = $('lastResult'); box.replaceChildren();
+  const last = history.slice(0, 2);
+  if (!last.length) { box.append(el('p', 'text-gray-500 text-sm', 'Belum ada hasil scan.')); return; }
+  last.forEach((h, i) => {
+    const s = STYLE[h.status] || STYLE.Terdeteksi;
+    const row = el('div', i ? 'pt-2 border-t border-gray-200' : '');
+    const top = el('div', 'flex justify-between items-center mb-2' + (i ? ' mt-2' : ''));
+    top.append(el('span', 'font-semibold text-gray-900 text-sm', h.commodity), el('span', 'font-bold text-sm ' + s.text, h.confidence.toFixed(1) + '%'));
+    const track = el('div', 'w-full bg-gray-200 rounded-full h-2'), bar = el('div', 'h-2 rounded-full ' + s.bar);
+    bar.style.width = Math.min(100, h.confidence) + '%'; track.append(bar);
+    row.append(top, track); box.append(row);
+  });
+}
+
+function renderHistory() {
+  const q = $('searchInput').value.trim().toLowerCase();
+  const list = $('historyList'); list.replaceChildren();
+  const items = history.filter(h => !q || (h.commodity + ' ' + h.status).toLowerCase().includes(q));
+  if (!items.length) { list.append(el('p', 'text-gray-500 text-sm', q ? 'Tidak ada hasil yang cocok.' : 'Belum ada riwayat. Mulai scan pertama Anda.')); return; }
+  items.slice(0, 30).forEach(h => {
+    const s = STYLE[h.status] || STYLE.Terdeteksi;
+    const card = el('div', 'bg-white p-4 rounded-2xl border border-gray-100 shadow-sm flex items-center gap-4');
+    card.append(el('div', 'w-12 h-12 rounded-xl flex items-center justify-center text-xs font-bold ' + s.chip, h.status.slice(0, 3)));
+    const info = el('div');
+    info.append(el('h3', 'font-bold text-gray-900 text-sm mb-0.5', fmtTime(h.ts) + ' • ' + h.commodity),
+                el('p', 'text-gray-500 text-xs', h.status + ' • ' + h.confidence.toFixed(1) + '%'));
+    card.append(info); list.append(card);
+  });
+}
+const renderAll = () => { renderStats(); renderLast(); renderHistory(); };
+
+/* ===== Scan real-time =====
+   Satu permintaan pada satu waktu: frame berikutnya dikirim setelah hasil sebelumnya kembali,
+   sehingga antrean tidak menumpuk walau server lambat. */
+const LIVE_SIDE = 640;          // sisi terpanjang frame yang dikirim (kecil = cepat, hemat kuota)
+const MIN_INTERVAL = 300;       // ms jeda minimal antar frame
+const WINDOW = 5;               // hasil dirata-rata dari 5 frame terakhir agar tidak berkedip
+const sleep = ms => new Promise(r => setTimeout(r, ms));
+const cap = document.createElement('canvas');
+let session = 0, win = [], latency = 0, fails = 0;
+
+const show = (id, on) => $(id).classList.toggle('hidden', !on);
+
+function setMode(m) {
+  mode = m;
+  show('scanBtn', m === 'idle'); show('liveControls', m !== 'idle'); show('stopBtn', m !== 'idle');
+  show('stage', m !== 'idle'); show('placeholder', m === 'idle');
+  $('liveControls').classList.toggle('grid', m !== 'idle');
+  $('pauseBtn').textContent = m === 'paused' ? 'Lanjut' : 'Jeda';
+  $('liveText').textContent = m === 'paused' ? 'JEDA' : 'LIVE';
+  $('liveBadge').classList.toggle('paused', m === 'paused');
+}
+
+async function startCamera() {
+  stream = await navigator.mediaDevices.getUserMedia({ video: { facingMode: { ideal: 'environment' }, width: { ideal: 1280 } }, audio: false });
+  const v = $('video'); v.srcObject = stream; await v.play();
+}
+
+function summary() {
+  const ok = win.filter(r => r.commodity !== 'Tidak terdeteksi');
+  if (!ok.length) return null;
+  const n = c => ok.filter(r => r.commodity === c).length;
+  const commodity = n('Tomat') >= n('Cabai') ? 'Tomat' : 'Cabai';
+  const fr = ok.filter(r => r.commodity === commodity);
+  let status = 'Terdeteksi';
+  if (commodity === 'Tomat') status = fr.filter(r => r.status === 'Menurun').length >= Math.min(2, fr.length) ? 'Menurun' : 'Segar';
+  return { commodity, status, confidence: fr.reduce((a, r) => a + r.confidence, 0) / fr.length };
+}
+
+function drawBoxes(data) {
+  const cv = $('overlay'), ctx = cv.getContext('2d');
+  ctx.clearRect(0, 0, cv.width, cv.height);
+  ctx.lineWidth = Math.max(2, cv.width / 250); ctx.font = `600 ${Math.round(cv.width / 32)}px Inter, sans-serif`;
+  (data.detections || []).forEach(d => {
+    const [x1, y1, x2, y2] = d.box, X = x1 * cv.width, Y = y1 * cv.height;
+    const color = d.label === 'Tomat_Menurun' ? STYLE.Menurun.box : d.label === 'Cabai' ? STYLE.Terdeteksi.box : STYLE.Segar.box;
+    ctx.strokeStyle = color; ctx.strokeRect(X, Y, (x2 - x1) * cv.width, (y2 - y1) * cv.height);
+    const t = d.label.replace('_', ' ') + ' ' + Math.round(d.conf * 100), h = parseInt(ctx.font.match(/(\d+)px/)[1]) + 6;
+    ctx.fillStyle = color; ctx.fillRect(X, Math.max(0, Y - h), ctx.measureText(t).width + 8, h);
+    ctx.fillStyle = '#fff'; ctx.fillText(t, X + 4, Math.max(h - 5, Y - 5));
+  });
+}
+
+function updateChip() {
+  const s = summary(), chip = $('liveChip');
+  if (!s) { chip.textContent = 'Mencari komoditas…'; chip.className = 'live-chip'; return; }
+  chip.textContent = `${s.commodity} • ${s.status} • ${s.confidence.toFixed(1)}%  (${latency} ms)`;
+  chip.className = 'live-chip ' + s.status.toLowerCase();
+}
+
+async function analyzeFrame() {
+  const v = $('video'), k = Math.min(1, LIVE_SIDE / Math.max(v.videoWidth, v.videoHeight));
+  cap.width = Math.round(v.videoWidth * k); cap.height = Math.round(v.videoHeight * k);
+  cap.getContext('2d').drawImage(v, 0, 0, cap.width, cap.height);
+  const blob = await new Promise(r => cap.toBlob(r, 'image/jpeg', 0.8));
+  const fd = new FormData(); fd.append('image', blob, 'frame.jpg');
+  const ctrl = new AbortController(), timer = setTimeout(() => ctrl.abort(), 15000), t0 = performance.now();
+  try {
+    const res = await fetch(`${API_BASE}/scan`, { method: 'POST', body: fd, signal: ctrl.signal });
+    if (!res.ok) throw new Error(res.status === 429 ? 'Terlalu banyak permintaan.' : 'Server tidak merespons (' + res.status + ').');
+    latency = Math.round(performance.now() - t0);
+    return await res.json();
+  } finally { clearTimeout(timer); }
+}
+
+async function loop(id) {
+  while (mode === 'live' && id === session) {
+    const t0 = performance.now();
+    try {
+      const data = await analyzeFrame();
+      if (id !== session) break;
+      const cv = $('overlay'); if (cv.width !== cap.width) { cv.width = cap.width; cv.height = cap.height; }
+      win.push(data); win = win.slice(-WINDOW); fails = 0; showError('');
+      drawBoxes(data); updateChip(); show('liveChip', true);
+    } catch (e) {
+      if (id !== session) break;
+      if (++fails >= 3) { pauseScan(); showError('Koneksi ke server terputus. Periksa internet lalu tekan Lanjut.'); break; }
+    }
+    await sleep(Math.max(0, MIN_INTERVAL - (performance.now() - t0)));
+  }
+}
+
+function resumeScan() { win = []; fails = 0; showError(''); $('video').play(); setMode('live'); loop(++session); }
+function pauseScan() { session++; $('video').pause(); setMode('paused'); }
+
+function stopScan() {
+  session++; win = [];
+  if (stream) stream.getTracks().forEach(t => t.stop()); stream = null;
+  $('overlay').getContext('2d').clearRect(0, 0, $('overlay').width, $('overlay').height);
+  show('liveChip', false); showError(''); setMode('idle');
+}
+
+function saveScan() {
+  const s = summary();
+  if (!s) { showError('Belum ada komoditas yang terdeteksi untuk disimpan.'); return; }
+  showError('');
+  history.unshift({ ts: Date.now(), ...s }); history = history.slice(0, 200);
+  try { localStorage.setItem(STORE_KEY, JSON.stringify(history)); } catch (_) {}
+  renderAll();
+  const b = $('saveBtn'); b.textContent = 'Tersimpan ✓'; setTimeout(() => b.textContent = 'Simpan', 1500);
+}
+
+$('scanBtn').addEventListener('click', async () => {
+  try { showError(''); await startCamera(); resumeScan(); }
+  catch (e) { showError(e.name === 'NotAllowedError' ? 'Izin kamera ditolak. Aktifkan izin kamera di pengaturan browser.' : 'Kamera tidak dapat dibuka: ' + e.message); }
+});
+$('pauseBtn').addEventListener('click', () => mode === 'live' ? pauseScan() : resumeScan());
+$('saveBtn').addEventListener('click', saveScan);
+$('stopBtn').addEventListener('click', stopScan);
+$('searchInput').addEventListener('input', renderHistory);
+document.addEventListener('visibilitychange', () => { if (document.hidden && mode === 'live') pauseScan(); });
+window.addEventListener('pagehide', stopScan);
+renderAll();
+</script>
+</body>
+</html>
